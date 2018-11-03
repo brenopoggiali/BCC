@@ -63,13 +63,13 @@ int exp_binaria(int r, const int b, const int e, const int n){
 int main(int argc, char const *argv[]){
 	int a, b, e, g, n, r, x, y;
 
-	printf("Digite o numero a: ");
+	printf("Type the number a: ");
 	scanf("%i", &a);
-	printf("Digite o numero b: ");
+	printf("Type the number b: ");
 	scanf("%i", &b);
-	printf("Digite o numero e: ");
+	printf("Type the number e: ");
 	scanf("%i", &e);
-	printf("Digite o numero n: ");
+	printf("Type the number n: ");
 	scanf("%i", &n);
 
 	r = a % b;
@@ -79,14 +79,19 @@ int main(int argc, char const *argv[]){
 
 	printf("The equation that we're looking for is: \n");
 	g = mdc_estendido(g, &x, &y, a, b);
-    printf("%i*%i + %i*%i = %i", a, x, b, y, g);
+    printf("%i*%i + %i*%i = %i \n\n", a, x, b, y, g);
 
 //Question 2
-    printf("\n\nExiste inverso modular: %i\n", inverso_modular(&r, a, n));
+    printf("Modular Multiplicative Inverse exists: %i\n", inverso_modular(&r, a, n));
     printf("r = %i\n\n", r);
 
 //Question 3
+    if(inverso_modular(&r, a, n) == 1){
     r = exp_binaria(r, b, e, n);
-    printf("O numero r que procuramos: %i", r);
+    printf("The r number that we're looking for is: %i", r);
+    }
+    else
+        printf("Since there's no modular inverse, there's no r that satisfies the equation")
+	
 	return 0;
 }
