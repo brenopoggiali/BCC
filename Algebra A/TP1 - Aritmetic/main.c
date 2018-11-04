@@ -47,15 +47,25 @@ int inverso_modular(int *r, const int a, const int n){
 }
 
 //Question 3
-int exp_binaria(int r, const int b, const int e, const int n){
-    if(e == 0)
-        return 1;
-    else if(e == 1)
-        return b%n;
-    else if(e%2 == 0)
-        return exp_binaria(r,b*b, e/2, n);
-    else
-        return (b*exp_binaria(r, b*b, ((e-1)/2), n));
+int exp_binaria(int r, const int b, const int e, const int n){ 
+    r = 1;
+    int x = b;
+    int y = e;
+
+    x = x%n;
+
+    while(y>0){
+    	//y = impar
+    	if (y%2 == 1){
+    		r = (r*x)%n;
+    	}
+
+    	//e = par
+    	y /= 2;
+    	x = (x*x)%n;
+    }
+
+    return r;
 }
 
 
@@ -86,12 +96,8 @@ int main(int argc, char const *argv[]){
     printf("r = %i\n\n", r);
 
 //Question 3
-    if(inverso_modular(&r, a, n) == 1){
     r = exp_binaria(r, b, e, n);
-    printf("The r number that we're looking for is: %i", r);
-    }
-    else
-        printf("Since there's no modular inverse, there's no r that satisfies the equation")
-	
+    printf("The r number that we're looking that made b^e congruent to r (mod n): %i\n\n", r);
+   
 	return 0;
 }
