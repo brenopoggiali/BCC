@@ -104,6 +104,7 @@ void gera_chaves(double *n, double *e, double *d){
 
 int main(int argc, char const *argv[]){
 	double n=2, e=65537, d=2;
+	double msg = 20;
 
 	gera_chaves(&n, &e, &d);
 
@@ -111,5 +112,11 @@ int main(int argc, char const *argv[]){
 	printf("e = public key = %.0lf\n", e);
 	printf("d = private key = %.0lf\n", d);
 
+	printf("\n");
+
+	printf("Message to encrypt: %lf\n", msg);
+	int c = exp_binaria((int)msg, e, n)
+	printf("Message encrypted: %lf\n", c);
+	printf("Message decripted\n");
 	return 0;
 }

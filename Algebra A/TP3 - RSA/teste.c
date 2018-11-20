@@ -84,7 +84,7 @@ long long extendedMDC(long long a, long long b){
 
 }
 
-//Calculate the reduced form of a^e (mod n) 
+//Calculate the P where a^e is congruent to P (mod n) 
 long power(long long a, long long e, long long n){
 	
 	long long A = a, P = 1, E = e;
@@ -112,8 +112,22 @@ long power(long long a, long long e, long long n){
 	
 }
 
-//codify a string of char using the rest of a division a^e(mod n) for each character using ASCII table
-int *codifica(char *message, long long e, long long n){
+//codify a string to ASCII
+void codifica(long long r, const char *str){
+	for (int i = 0; str[i] != '\n'; ++i){
+		printf("%i\n", (int) str[i]);
+	}
+}
+
+//decodify a string from ASCII
+char *decodifica(const long long n){
+
+	
+
+}
+
+//encrypt a string of char using the rest of a division a^e(mod n) for each character using ASCII table
+int *criptografa(char *message, long long e, long long n){
 	
 	long long i;
 	int *messageC;
@@ -126,8 +140,8 @@ int *codifica(char *message, long long e, long long n){
 	return messageC;
 }
 
-//decodify a vector of int in a string of char using the rest of a division a^e(mod n) for each int
-char *decodifica(int *messageC, long long d, long long n){
+//decrypt a vector of int in a string of char using the rest of a division a^e(mod n) for each int
+char *descriptografa(int *messageC, long long d, long long n){
 	
 	long long i;
 	char *message;
@@ -177,33 +191,38 @@ int main(void){
 
 
 	//read message to be encrypted
-	printf("\nType a message\n");
-	
-	//Limpa o buffer
+	printf("Type a message: \n");
+	//clean the buffer
 	scanf("\n");
 	fgets(message, 500, stdin);
 
 	gera_chaves(&n, &e, &d);
 	
-	printf("\nPrivate key: (%llu, %llu)\n", e, n);
-	printf("\nPublic key: (%llu, %llu)\n", d, n);
 
-	//codify message
-	messageC = codifica(message, e, n);
+	printf("Private key: (%llu, %llu)\n", e, n);
+	printf("Public key: (%llu, %llu)\n", d, n);
+
 	
+	codifica(n, message);
+
+	//encrypt message
+	messageC = criptografa(message, e, n);
+	
+	printf("\n");
+
 	//prints encrypted message
-	printf("\nEncrypted message: ");
+	printf("Encrypted message: ");
 
 	for(i = 0; i < strlen(message); i++){
 		printf("%c", messageC[i]);
 	}
-	printf("\n");	
+	printf("\n\n");	
 
-	//decodify a message
+	//decrypt a message
 	char *messageD;
-	messageD = decodifica(messageC, d, n);
+	messageD = descriptografa(messageC, d, n);
 
-	printf("\nDecrypted message: %s\n\n", messageD);
+	printf("Decrypted message: %s\n\n", messageD);
 
 	//free allocated memory
 	free(messageC);
