@@ -1,0 +1,7 @@
+# ignore files created by test
+*.gcda
+*gcno
+
+# ignore folders created by test
+bin/
+build/
