@@ -4,23 +4,22 @@
 #include <vector>
 #include <map>
 
-#include "peca.h"
-#include "peao.h"
-#include "rainha.h"
-#include "bispo.h"
-#include "cavalo.h"
-#include "torre.h"
-#include "rei.h"
 #include "posicao.h"
 
+using namespace std;
+
+
 class Tabuleiro{
-  map<string, map<Posicao, Peca*>> _pecas;
+    private:
+        map<Posicao*, Peca *> _pecas;
+        vector<Posicao*> tabuleiro;
 
-  public:
-    Tabuleiro();
-    bool pode_mover(Posicao& p);
-
-    ~Tabuleiro();
+    public:
+        Tabuleiro();
+        void move(Posicao a, Posicao b);
+        /*void inicializa_pecas();
+        
+        ~Tabuleiro();*/
 };
 
 #endif

@@ -3,11 +3,14 @@
 
 #include "peca.h"
 
-class Cavalo : public Peca{
-
+class Cavalo: public Peca{
   public:
-    Cavalo(int x, int y, Tabuleiro* t);
-    virtual bool pode_mover(int x, int y);
+    Cavalo(int x, int y);
+    bool pode_mover(int x, int y) override;
+    void move(int x, int y) override;
+    string getPeca() override;
+    
+    ~Cavalo();
 };
 
 #endif

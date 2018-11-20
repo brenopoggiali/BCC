@@ -1,11 +1,20 @@
 #ifndef POSICAO_H
 #define POSICAO_H
 
-struct Posicao{
-    int _x;
-    int _y;
-    Posicao(int _x, int _y);
-    void set_posicao(int _x, int _y);
+#include"peca.h"
+
+class Posicao{
+    private:
+        int _x;
+        int _y;
+        bool _vazio;
+    public:
+        Posicao(int x, int y);
+        bool vazio();
+        void porPeca();
+        void retirarPeca();
+        int get_x();
+        int get_y();
 };
 
 #endif
