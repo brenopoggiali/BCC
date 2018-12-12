@@ -242,10 +242,98 @@ void gera_chaves(mpz_t n, mpz_t e, mpz_t d, gmp_randstate_t rnd){
 	mpz_clear(y);
 }
 
+// r = string (message) codified to a number in pow(256)
+void codifica(mpz_t r, const char *str){
+    mpz_t character_criptografado; mpz_init(character_criptografado);
+ for(unsigned int i = 0; (str[i]) != '\0'; i++){
+        mpz_set_ui(character_criptografado,1);
+        int k= 0;
+        while(k<i){
+            mpz_mul_ui(character_criptografado,character_criptografado,256);  
+        	k++;
+        }
+
+        char character = str[i];
+      	mpz_mul_ui(character_criptografado,character_criptografado,character);
+        mpz_add(r,r,character_criptografado);
+    }
+
+    mpz_clear(character_criptografado);
+}
+
+//decodify n to a string
+char* decodifica(const mpz_t n){
+    int num_chars = 0;
+    char* msg = (char*)malloc(100000*sizeof(char));
+
+    mpz_t (q); mpz_init(q);
+    mpz_t (pow_256); mpz_init(pow_256);
+    mpz_t (char_codified); mpz_init(char_codified);
+    mpz_t (n1); mpz_init(n1);
+    mpz_set(n1,n);
+
+    for(;mpz_cmp_ui(n1,0) != 0;){
+        mpz_set(q,n1);
+        unsigned int iter = 0;
+
+        for (; mpz_cmp_ui(q,256) != -1; iter++){
+        	mpz_fdiv_q_ui(q,q,256);
+        }
+
+        unsigned int character = mpz_get_ui(q);
+
+        *(msg+num_chars) = (char)character;
+        num_chars++;
+        
+        mpz_set_ui(pow_256,1);
+        for (unsigned int i = 0; i < iter; ++i){
+        	mpz_mul_ui(pow_256,pow_256,256);
+        }
+
+        mpz_mul_ui(char_codified,pow_256,character);
+		mpz_sub(n1,n1,char_codified);
+    }
+
+    char* message_inverted = (char*)malloc(num_chars * sizeof(char));  
+    int t = num_chars - 1;
+    int u = 0;
+    do{   
+        message_inverted[u] = msg[t];
+        u= u+1;
+        t = t-1;
+    }while(t != -1);
+
+	message_inverted[u] = '\0';
+
+    free(msg);
+    mpz_clear(q);
+    mpz_clear(n1);
+    mpz_clear(pow_256);
+    mpz_clear(char_codified);
+
+    
+    return message_inverted;
+}
+
+//RSA encrypted
+void criptografa(mpz_t C,const mpz_t M,const mpz_t n,const mpz_t e){
+    exp_binaria(C,M,e,n);
+}
+
+//RSA decrypted
+void descriptografa(mpz_t M,const mpz_t C,const mpz_t n,const mpz_t d){
+   	exp_binaria(M,C,d,n);
+}
+
 int main(int argc, char const *argv[]){
 	mpz_t(n); mpz_init(n);
 	mpz_t(e); mpz_init(e);
 	mpz_t(d); mpz_init(d);
+	mpz_t(r); mpz_init(r);
+	mpz_t(C); mpz_init(C);
+	mpz_t(M); mpz_init(M);
+
+	char message[500];
 
 	gmp_randstate_t (rnd);
 	gmp_randinit_default(rnd);
@@ -257,12 +345,31 @@ int main(int argc, char const *argv[]){
 		gmp_printf("Private key: (%Zd, %Zd)\n", n, d);
 
 	printf("\n\nQuestion 2:\n");
+		printf("Type the text to be encrypted: ");
+		scanf("\n");
+    	fgets(message, 500, stdin);
+
+    	codifica(r, message);
+    	gmp_printf("Codified text: %Zd", r);
+
+
 	printf("\n\nQuestion 3:\n");
+		printf("Decodified text: %s", decodifica(r));
+
 	printf("\n\nQuestion 4:\n");
+		criptografa(C, r, n, e);
+		gmp_printf("Encrypted text: %Zd\n\n", C);
+
 	printf("\n\nQuestion 5:\n");
+		descriptografa(M, C, n, d);
+		gmp_printf("Decrypted text: %Zd\n", M);
+		printf("Decrypted and decodified text: %s", decodifica(M));
 
 	mpz_clear(n);
 	mpz_clear(e);
 	mpz_clear(d);
+	mpz_clear(r);
+	mpz_clear(C);
+	mpz_clear(M);
 	return 0;
 }
