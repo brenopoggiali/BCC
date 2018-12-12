@@ -244,21 +244,21 @@ void gera_chaves(mpz_t n, mpz_t e, mpz_t d, gmp_randstate_t rnd){
 
 // r = string (message) codified to a number in pow(256)
 void codifica(mpz_t r, const char *str){
-    mpz_t character_criptografado; mpz_init(character_criptografado);
+    mpz_t char_encrypted; mpz_init(char_encrypted);
  for(unsigned int i = 0; (str[i]) != '\0'; i++){
-        mpz_set_ui(character_criptografado,1);
+        mpz_set_ui(char_encrypted,1);
         int k= 0;
         while(k<i){
-            mpz_mul_ui(character_criptografado,character_criptografado,256);  
+            mpz_mul_ui(char_encrypted,char_encrypted,256);  
         	k++;
         }
 
         char character = str[i];
-      	mpz_mul_ui(character_criptografado,character_criptografado,character);
-        mpz_add(r,r,character_criptografado);
+      	mpz_mul_ui(char_encrypted,char_encrypted,character);
+        mpz_add(r,r,char_encrypted);
     }
 
-    mpz_clear(character_criptografado);
+    mpz_clear(char_encrypted);
 }
 
 //decodify n to a string
