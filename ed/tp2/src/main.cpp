@@ -31,12 +31,27 @@ int main(int argc, char const *argv[]){
   Array crescente(10);
   Array decrescente(10);
   Array aleatorio(10);
+  Array aleatorio2(10);
 
   decrescente.desc_array();
   aleatorio.shuffle_array();
+  aleatorio.get_qc();
 
   crescente.print_array();
   decrescente.print_array();
   aleatorio.print_array();
+  aleatorio2.shuffle_array();
+  aleatorio2.print_array();
+
+  printf("\n");
+
+  aleatorio.print_array();
+
+  aleatorio2.get_qm3();
+  aleatorio2.print_array();
+
+  decrescente.get_qpe();
+  decrescente.print_array();
+
   return 0;
 }

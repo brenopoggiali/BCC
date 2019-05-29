@@ -42,6 +42,8 @@ bool slimp(char *string, int *aux){
           else
             return false;
         }
+        else
+          return false;
       }
     }
   }
