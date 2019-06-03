@@ -4,21 +4,6 @@
 #include <stdio.h>
 #include <iostream>
 
-// void timer(){
-//   struct timespec start, end;
-//   // Pega o horário do sistema antes da execução do código
-//   clock_gettime(CLOCK_REALTIME, &start);
-//   // Código que você quer medir o tempo
-//   for (int i = 0; i < 1000000; i++) {
-//     string queen = "Elsa";
-//   }
-//   // Pega o horário do sistema depois da execução do código
-//   clock_gettime(CLOCK_REALTIME, &end);
-//   // Obtém a diferença entre o horário de fim e o de início
-  // long elapsed_time = 1.e+6 * (double) (end.tv_sec - start.tv_sec)
-  // + 1.e-3 * (double) (end.tv_nsec - start.tv_nsec);
-//   printf("Tempo de execução: %ld microssegundos\n", elapsed_time);
-// }
 
 int main(int argc, char const *argv[]){
   // printf("%s\n", *argv);
