@@ -1,6 +1,9 @@
 #ifndef ARRAY_H_
 #define ARRAY_H_
 #include <string>
+#include <cstdlib>
+#include <ctime>
+#include <chrono>
 
 using namespace std;
 
@@ -23,7 +26,7 @@ class Array{
     void get_qpe();
     void get_qi(int k);
     void get_nr();
-    
+
     void print_array();
     ~Array();
 };

@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <time.h>       /* time */
 #include "array.h"
 
 using namespace std;
@@ -27,7 +26,11 @@ using namespace std;
   }
   void Array::shuffle_array(){
   /* initialize random seed: */
-    srand (time(NULL));
+    auto now = std::chrono::system_clock::now();
+    auto now_ms = std::chrono::time_point_cast<std::chrono::microseconds>(now);
+    auto value = now_ms.time_since_epoch();
+    long duration = value.count();
+    srand (duration);
     for (int i = 0; i < this->size; ++i){
       /* generate secret number between 1 and 10: */
       this->array[i] = rand() % this->size;
@@ -42,7 +45,7 @@ using namespace std;
     switch(type){
       case 1:
         return(A[(i+j)/2]);
-      case 2: 
+      case 2:
         int esq, meio, dir;
         esq = A[i]; meio = A[(i+j)/2]; dir = A[j];
         if( (esq>dir && esq<meio) || (esq<dir && esq>meio) ){
@@ -62,7 +65,7 @@ using namespace std;
     int pivot, aux, i, j;
     i = esq;
     j = dir;
-    pivot = which_pivot(A, i, j, type);  
+    pivot = which_pivot(A, i, j, type);
     do{
       while (A[i] < pivot) i = i + 1;
       while (A[j] > pivot) j = j - 1;
@@ -75,7 +78,7 @@ using namespace std;
       }
     }while(j > i);
     if(esq < j) quick_sort(A, esq, j, type);
-    if(i < dir) quick_sort(A, i, dir, type);   
+    if(i < dir) quick_sort(A, i, dir, type);
   }
   void Array::get_qc(){
     quick_sort(this->array, 0, this->size-1, 1);
@@ -87,10 +90,9 @@ using namespace std;
     quick_sort(this->array, 0, this->size-1, 3);
   }
   void Array::get_qi(int k){
-    
+
   }
   void Array::get_nr(){
-    
   }
   void Array::print_array(){
     for (int i = 0; i < this->size; ++i){
