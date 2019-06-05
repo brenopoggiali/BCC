@@ -11,15 +11,22 @@ class Array{
   public:
     int* array;
     int size;
+    unsigned int moves;
+    unsigned int comparisons;
 
     Array(int size);
-    int* get_array();
-    int get_size();
+
     void desc_array();
     void shuffle_array();
 
+
+    int* get_array();
+    int get_size();
+    unsigned int get_moves();
+    unsigned int get_comparisons();
+
     int which_pivot(int* A, int i, int j, int type);
-    void quick_sort(int* A, int esq, int dir, int type);
+    void quick_sort(int* A, int esq, int dir, int type, int k);
 
     void get_qc();
     void get_qm3();

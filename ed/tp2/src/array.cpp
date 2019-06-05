@@ -6,7 +6,10 @@ using namespace std;
 
   Array::Array(int size){
     this->size = size;
+    this->moves = 0;
+    this->comparisons = 0;
     this->array = new int[this->size];
+
     for (int i = 0; i < this->size; ++i){
       this->array[i] = i;
     }
@@ -36,6 +39,45 @@ using namespace std;
       this->array[i] = rand() % this->size;
     }
   }
+  void Array::quick_sort(int* A, int esq, int dir, int type, int k){
+    int pivot, aux, i, j;
+    i = esq;
+    j = dir;
+    if (k==0 || dir-esq+1 < this->size*k*0.01){
+      pivot = which_pivot(A, esq, dir, type);
+      do{
+        while (A[i] < pivot){ i++; this->comparisons++;}
+        this->comparisons++;
+        while (A[j] > pivot){ j--; this->comparisons++;}
+        this->comparisons++;
+        if(i <= j){
+           aux = A[i];
+           A[i] = A[j];
+           A[j] = aux;
+           i++; j--;
+           this->moves++;
+        }
+      }while(j > i);
+      if(esq < j) quick_sort(A, esq, j, type, k);
+      if(i < dir) quick_sort(A, i, dir, type, k);
+    }else{
+      for (j = 1; j < this->size; j++){
+          i = j-1;
+          pivot = which_pivot(A, i, j, 2);
+          while ((i >= 0) && (A[i] > pivot)){
+              A[i+1] = A[i];
+              i--;
+              this->moves++;
+              this->comparisons++;
+          }
+          if(i>=0){
+            this->comparisons++;
+          }
+          A[i+1] = pivot;
+          this->moves++;
+      }
+    }
+  }
   int Array::which_pivot(int* A, int i, int j, int type){
     /*
       1 = QC
@@ -61,36 +103,17 @@ using namespace std;
         return(A[i]);
     }
   }
-  void Array::quick_sort(int* A, int esq, int dir, int type){
-    int pivot, aux, i, j;
-    i = esq;
-    j = dir;
-    pivot = which_pivot(A, i, j, type);
-    do{
-      while (A[i] < pivot) i = i + 1;
-      while (A[j] > pivot) j = j - 1;
-      if(i <= j){
-         aux = A[i];
-         A[i] = A[j];
-         A[j] = aux;
-         i = i + 1;
-         j = j - 1;
-      }
-    }while(j > i);
-    if(esq < j) quick_sort(A, esq, j, type);
-    if(i < dir) quick_sort(A, i, dir, type);
-  }
   void Array::get_qc(){
-    quick_sort(this->array, 0, this->size-1, 1);
+    quick_sort(this->array, 0, this->size-1, 1, 0);
   }
   void Array::get_qm3(){
-    quick_sort(this->array, 0, this->size-1, 2);
+    quick_sort(this->array, 0, this->size-1, 2, 0);
   }
   void Array::get_qpe(){
-    quick_sort(this->array, 0, this->size-1, 3);
+    quick_sort(this->array, 0, this->size-1, 3, 0);
   }
   void Array::get_qi(int k){
-
+    quick_sort(this->array, 0, this->size-1, 2, k);
   }
   void Array::get_nr(){
   }
@@ -103,6 +126,12 @@ using namespace std;
         printf("%i\n", this->array[i]);
       }
     }
+  }
+  unsigned int Array::get_moves(){
+    return this->moves;
+  }
+  unsigned int Array::get_comparisons(){
+    return this->comparisons;
   }
   Array::~Array(){
     delete this->array;

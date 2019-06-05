@@ -4,12 +4,12 @@
 #include <stdio.h>
 #include <iostream>
 
-
 int main(int argc, char const *argv[]){
   // printf("%s\n", *argv);
-  struct timespec start, end;
-  std::chrono::high_resolution_clock::time_point t1;
-  std::chrono::high_resolution_clock::time_point t2;
+  int n, moves, comparisons;
+  long long microseconds;
+  std::chrono::high_resolution_clock::time_point start;
+  std::chrono::high_resolution_clock::time_point end;
   std::chrono::duration<double, std::micro> elapsed_time;
 
   string types[3] = {"Ale", "OrdC", "OrdD"};
@@ -19,83 +19,65 @@ int main(int argc, char const *argv[]){
                       300000, 350000, 400000, 450000, 500000};
 
   for (int i = 0; i < 7; ++i){
-    for (int j = 0; j < 1; ++j){
-      for (int k = 0; k < 1; ++k){
-        Array exemplo(10);
+    for (int j = 0; j < 3; ++j){
+      for (int k = 0; k < 10; ++k){
+        double *median_time = new double[21];
+        for (int t = 0; t < 1; ++t){
+          Array exemplo(tamanhos[k]);
+          comparisons = 0;
+          moves = 0;
+          // Get array type
+          if(types[j] == "Ale") exemplo.shuffle_array();
+          else if(types[j] == "OrdD") exemplo.desc_array();
 
-        // Get array type
-        if(types[j] == "Ale") exemplo.shuffle_array();
-        else if(types[j] == "OrdD") exemplo.desc_array();
+          // Get quickSort
+          if (quickSorts[i] == "QC"){
+            start = std::chrono::high_resolution_clock::now();
+            exemplo.get_qc();
+            end = std::chrono::high_resolution_clock::now();
+          }else if (quickSorts[i] == "QM3"){
+            start = std::chrono::high_resolution_clock::now();
+            exemplo.get_qm3();
+            end = std::chrono::high_resolution_clock::now();
+          }else if (quickSorts[i] == "QPE"){
+            start = std::chrono::high_resolution_clock::now();
+            exemplo.get_qpe();
+            end = std::chrono::high_resolution_clock::now();
+          }else if (quickSorts[i] == "QI1"){
+            start = std::chrono::high_resolution_clock::now();
+            exemplo.get_qi(1);
+            end = std::chrono::high_resolution_clock::now();
+          }else if (quickSorts[i] == "QI5"){
+            start = std::chrono::high_resolution_clock::now();
+            exemplo.get_qi(5);
+            end = std::chrono::high_resolution_clock::now();
+          }else if (quickSorts[i] == "QI10"){
+            start = std::chrono::high_resolution_clock::now();
+            exemplo.get_qi(10);
+            end = std::chrono::high_resolution_clock::now();
+          }else{
+            break;
+          }
 
-        std::cout << "Antes: ";
-        exemplo.print_array();
-
-        // Get quickSort
-        if (quickSorts[i] == "QC"){
-          t1 = std::chrono::high_resolution_clock::now();
-          exemplo.get_qc();
-          t2 = std::chrono::high_resolution_clock::now();
-        }else if (quickSorts[i] == "QM3"){
-          t1 = std::chrono::high_resolution_clock::now();
-          exemplo.get_qm3();
-          t2 = std::chrono::high_resolution_clock::now();
-        }else if (quickSorts[i] == "QPE"){
-          t1 = std::chrono::high_resolution_clock::now();
-          exemplo.get_qpe();
-          t2 = std::chrono::high_resolution_clock::now();
-        }else if (quickSorts[i] == "QI1"){
-          t1 = std::chrono::high_resolution_clock::now();
-          exemplo.get_qi(1);
-          t2 = std::chrono::high_resolution_clock::now();
-        }else if (quickSorts[i] == "QI5"){
-          t1 = std::chrono::high_resolution_clock::now();
-          exemplo.get_qi(5);
-          t2 = std::chrono::high_resolution_clock::now();
-        }else if (quickSorts[i] == "QI10"){
-          t1 = std::chrono::high_resolution_clock::now();
-          exemplo.get_qi(10);
-          t2 = std::chrono::high_resolution_clock::now();
-        }else{
-          break;
+          elapsed_time = std::chrono::duration_cast<std::chrono::duration<double>>(end - start);
+          median_time[t] = elapsed_time.count();
+          comparisons = exemplo.get_comparisons();
+          moves = exemplo.get_moves();
+          // std::cout << median_time[t] << " - ";
+          // std::cout << median_time[t]*1000 << std::endl;
         }
-
-        std::cout << "Depois: ";
-        exemplo.print_array();
-
-        elapsed_time = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
-
+        // median_time.print_array();
+        // median_time.get_qc();
+        // median_time.print_array();
         std::cout << quickSorts[i] << " ";
         std::cout << types[j] << " ";
         std::cout << tamanhos[k] << " ";
-        std::cout << elapsed_time.count() << std::endl;
+        std::cout << comparisons << " ";
+        std::cout << moves << " ";
+        std::cout << median_time[0] << std::endl;
       }
     }
   }
-
-  // Array crescente(10);
-  // Array decrescente(10);
-  // Array aleatorio(10);
-  // Array aleatorio2(10);
-
-  // decrescente.desc_array();
-  // aleatorio.shuffle_array();
-  // aleatorio.get_qc();
-
-  // crescente.print_array();
-  // decrescente.print_array();
-  // aleatorio.print_array();
-  // aleatorio2.shuffle_array();
-  // aleatorio2.print_array();
-
-  // printf("\n");
-
-  // aleatorio.print_array();
-
-  // aleatorio2.get_qm3();
-  // aleatorio2.print_array();
-
-  // decrescente.get_qpe();
-  // decrescente.print_array();
 
   return 0;
 }
