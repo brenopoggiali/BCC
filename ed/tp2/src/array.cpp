@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "array.h"
+#include "stack.h"
+
 
 using namespace std;
 
@@ -8,16 +10,16 @@ using namespace std;
     this->size = size;
     this->moves = 0;
     this->comparisons = 0;
-    this->array = new int[this->size];
+    this->array = new unsigned int[this->size];
 
     for (int i = 0; i < this->size; ++i){
       this->array[i] = i;
     }
   }
-  int* Array::get_array(){
+  unsigned int* Array::get_array(){
     return this->array;
   }
-  int Array::get_size(){
+  unsigned int Array::get_size(){
     return this->size;
   }
   void Array::desc_array(){
@@ -35,15 +37,16 @@ using namespace std;
     long duration = value.count();
     srand (duration);
     for (int i = 0; i < this->size; ++i){
-      /* generate secret number between 1 and 10: */
+      /* generate random number between 1 and size: */
       this->array[i] = rand() % this->size;
     }
   }
-  void Array::quick_sort(int* A, int esq, int dir, int type, int k){
+  void Array::quick_sort(unsigned int* A, int esq, int dir, int type, int k){
     int pivot, aux, i, j;
     i = esq;
     j = dir;
     if (k==0 || dir-esq+1 < this->size*k*0.01){
+      // partition
       pivot = which_pivot(A, esq, dir, type);
       do{
         while (A[i] < pivot){ i++; this->comparisons++;}
@@ -58,6 +61,7 @@ using namespace std;
            this->moves++;
         }
       }while(j > i);
+      // recursive quick sort
       if(esq < j) quick_sort(A, esq, j, type, k);
       if(i < dir) quick_sort(A, i, dir, type, k);
     }else{
@@ -70,15 +74,57 @@ using namespace std;
               this->moves++;
               this->comparisons++;
           }
-          if(i>=0){
-            this->comparisons++;
-          }
           A[i+1] = pivot;
           this->moves++;
       }
     }
   }
-  int Array::which_pivot(int* A, int i, int j, int type){
+  void Array::quick_sort_non_recursive(unsigned int* A, int esq, int dir){
+    Stack stack = Stack(this->size);
+    int pivot, aux, i, j;
+    edges e;
+    e.left = esq;
+    e.right = dir;
+    stack.push(e);
+    do{
+      if(dir > esq) {
+        // partition
+        i = esq;
+        j = dir;
+        pivot = A[(i+j)/2];
+        do {
+          while (A[i] < pivot){ i++; this->comparisons++;}
+          this->comparisons++;
+          while (A[j] > pivot){ j--; this->comparisons++;}
+          this->comparisons++;
+          if(i <= j){
+             aux = A[i];
+             A[i] = A[j];
+             A[j] = aux;
+             i++; j--;
+             this->moves++;
+          }
+        } while (j > i);
+        // non recursive quick sort
+        if((j-esq) > (dir-i)){
+          e.left = esq;
+          e.right = j;
+          stack.push(e);
+          esq = i;
+        } else {
+          e.left = i;
+          e.right = dir;
+          stack.push(e);
+          dir = j;
+        }
+      } else {
+        e = stack.pop();
+        esq = e.left;
+        dir = e.right;
+      }
+    }while(!stack.is_empty());
+  }
+  int Array::which_pivot(unsigned int* A, int i, int j, int type){
     /*
       1 = QC
       2 = QM3
@@ -115,7 +161,8 @@ using namespace std;
   void Array::get_qi(int k){
     quick_sort(this->array, 0, this->size-1, 2, k);
   }
-  void Array::get_nr(){
+  void Array::get_qnr(){
+    quick_sort_non_recursive(this->array, 0, this->size-1);
   }
   void Array::print_array(){
     for (int i = 0; i < this->size; ++i){
@@ -127,12 +174,20 @@ using namespace std;
       }
     }
   }
-  unsigned int Array::get_moves(){
+  unsigned long long int Array::get_moves(){
     return this->moves;
   }
-  unsigned int Array::get_comparisons(){
+  unsigned long long int Array::get_comparisons(){
     return this->comparisons;
   }
+  void Array::set_element(int i, unsigned int element){
+    this->array[i] = element;
+  }
+  int Array::get_median(){
+    if(this->size%2 == 0)
+      return ((this->array[(this->size/2)-1]+this->array[this->size/2])/2);
+    return this->array[11];
+  }
   Array::~Array(){
-    delete this->array;
+    delete [] this->array;
   }

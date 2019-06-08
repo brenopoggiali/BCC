@@ -1,5 +1,5 @@
 all:
-	g++ ./src/*.cpp -o main;./main;
+	g++ ./src/*.cpp -o main;
 
 # tests:
 # 	for i in $$(seq 1 6); do ./main < ./testes/$$i.in > ./testes/file$$i.out; done
