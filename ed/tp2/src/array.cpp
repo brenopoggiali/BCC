@@ -43,9 +43,10 @@ using namespace std;
   }
   void Array::quick_sort(unsigned int* A, int esq, int dir, int type, int k){
     int pivot, aux, i, j;
+    unsigned int current_element;
     i = esq;
     j = dir;
-    if (k==0 || dir-esq+1 < this->size*k*0.01){
+    if (k==0 || (dir-esq) > ((this->size*k)/100)){
       // partition
       pivot = which_pivot(A, esq, dir, type);
       do{
@@ -65,14 +66,17 @@ using namespace std;
       if(esq < j) quick_sort(A, esq, j, type, k);
       if(i < dir) quick_sort(A, i, dir, type, k);
     }else{
-      for (j = 1; j < this->size; j++){
+      for (j = esq+1; j <= dir; j++){
+          current_element = A[j];
           i = j-1;
-          pivot = which_pivot(A, i, j, 2);
-          while ((i >= 0) && (A[i] > pivot)){
+          while ((i >= esq) && (current_element < A[i])){
               A[i+1] = A[i];
               i--;
               this->moves++;
               this->comparisons++;
+          }
+          if(i >= esq) {
+            this->comparisons++;
           }
           A[i+1] = pivot;
           this->moves++;
