@@ -47,7 +47,7 @@ using namespace std;
     i = esq;
     j = dir;
     if (k==0 || (dir-esq) > ((this->size*k)/100)){
-      // partition
+      /* partition */
       pivot = which_pivot(A, esq, dir, type);
       do{
         while (A[i] < pivot){ i++; this->comparisons++;}
@@ -62,10 +62,11 @@ using namespace std;
            this->moves++;
         }
       }while(j > i);
-      // recursive quick sort
+      /* recursive quick sort */
       if(esq < j) quick_sort(A, esq, j, type, k);
       if(i < dir) quick_sort(A, i, dir, type, k);
-    }else{
+    } else {
+      /* if insertion sort condition: */
       for (j = esq+1; j <= dir; j++){
           current_element = A[j];
           i = j-1;
@@ -92,7 +93,7 @@ using namespace std;
     stack.push(e);
     do{
       if(dir > esq) {
-        // partition
+        /* partition */
         i = esq;
         j = dir;
         pivot = A[(i+j)/2];
@@ -109,7 +110,7 @@ using namespace std;
              this->moves++;
           }
         } while (j > i);
-        // non recursive quick sort
+        /* non recursive quick sort */
         if((j-esq) > (dir-i)){
           e.left = esq;
           e.right = j;
@@ -190,7 +191,7 @@ using namespace std;
   int Array::get_median(){
     if(this->size%2 == 0)
       return ((this->array[(this->size/2)-1]+this->array[this->size/2])/2);
-    return this->array[11];
+    return this->array[this->size/2];
   }
   Array::~Array(){
     delete [] this->array;
